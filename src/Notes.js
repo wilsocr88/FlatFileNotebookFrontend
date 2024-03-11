@@ -90,7 +90,10 @@ export default function Notes(props) {
 
     const renderAreYouSure = () => (
         <Modal show={showAreYouSure}>
-            <Modal.Body>Are you sure you want to delete this note?</Modal.Body>
+            <Modal.Body>
+                Are you sure you want to delete this note? This cannot be
+                undone.
+            </Modal.Body>
             <Modal.Footer>
                 <button
                     onClick={() => {

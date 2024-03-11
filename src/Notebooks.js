@@ -78,7 +78,7 @@ export default function Notebooks(props) {
         <Modal show={showAreYouSure}>
             <Modal.Body>
                 Are you sure you want to delete this notebook and all of its
-                notes?
+                notes? This cannot be undone.
             </Modal.Body>
             <Modal.Footer>
                 <button
