@@ -5,6 +5,7 @@ import { Modal } from "react-bootstrap";
 export default function Notebooks(props) {
     const [newName, setNewName] = useState("");
     const [showModal, setShowModal] = useState(false);
+    const [showAreYouSure, setShowAreYouSure] = useState(false);
 
     const handleAddButton = () => setShowModal(true);
 
@@ -25,6 +26,7 @@ export default function Notebooks(props) {
     };
 
     const deleteNotebook = () => {
+        setShowAreYouSure(false);
         deleteList(props.currentNotebook).then(() => {
             props.setCurrentNotebook(null);
             props.getFiles();
@@ -42,7 +44,12 @@ export default function Notebooks(props) {
             >
                 <li key={notebook}>
                     <p>{notebook}</p>
-                    <button onClick={deleteNotebook}>DELETE</button>
+                    <button
+                        className="cancel-button"
+                        onClick={() => setShowAreYouSure(true)}
+                    >
+                        Delete
+                    </button>
                 </li>
             </a>
         ));
@@ -67,9 +74,31 @@ export default function Notebooks(props) {
         </Modal>
     );
 
+    const renderAreYouSure = () => (
+        <Modal show={showAreYouSure}>
+            <Modal.Body>
+                Are you sure you want to delete this notebook and all of its
+                notes?
+            </Modal.Body>
+            <Modal.Footer>
+                <button
+                    onClick={() => {
+                        setShowAreYouSure(false);
+                    }}
+                >
+                    No
+                </button>
+                <button className="cancel-button" onClick={deleteNotebook}>
+                    Yes
+                </button>
+            </Modal.Footer>
+        </Modal>
+    );
+
     return (
         <>
             {renderModal()}
+            {renderAreYouSure()}
             <section className="display">
                 <button onClick={handleAddButton} className="add-button">
                     + New Notebook

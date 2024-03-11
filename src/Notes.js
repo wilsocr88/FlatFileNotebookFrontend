@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
 import { deleteItem, editItem } from "./api/notesAPI";
+import { Modal } from "react-bootstrap";
 
 export default function Notes(props) {
     const [editing, setEditing] = useState(null);
+    const [editTitle, setEditTitle] = useState("");
+    const [editText, setEditText] = useState("");
+    const [currentId, setCurrentId] = useState(null);
+    const [showAreYouSure, setShowAreYouSure] = useState(false);
 
-    const handleTitleInput = e => props.setTitle(e.target.value);
-    const handleTextInput = e => props.setText(e.target.value);
+    const handleTitleInput = e => setEditTitle(e.target.value);
+    const handleTextInput = e => setEditText(e.target.value);
     const handleSubmit = e => {
         e.preventDefault();
-        editItem(editing, props.currentNotebook, props.title, props.text)
+        editItem(editing, props.currentNotebook, editTitle, editText)
             .then(r => {
-                props.setTitle("");
-                props.setText("");
+                setEditTitle("");
+                setEditText("");
                 setEditing(null);
                 props.getNotes();
             })
@@ -19,13 +24,22 @@ export default function Notes(props) {
     };
 
     const handleEditButton = i => {
-        props.setTitle(props.notes[i].title);
-        props.setText(props.notes[i].body);
+        setEditTitle(props.notes[i].title);
+        setEditText(props.notes[i].body);
         setEditing(i);
     };
 
-    const deleteNote = id => {
-        deleteItem(id, props.currentNotebook).then(() => props.getNotes());
+    const areYouSure = id => {
+        setCurrentId(id);
+        setShowAreYouSure(true);
+    };
+
+    const deleteNote = () => {
+        setShowAreYouSure(false);
+        deleteItem(currentId, props.currentNotebook).then(() => {
+            setCurrentId(null);
+            props.getNotes();
+        });
     };
 
     const renderList = () => {
@@ -39,7 +53,7 @@ export default function Notes(props) {
                             className="title-input"
                             type="text"
                             onInput={handleTitleInput}
-                            value={props.title}
+                            value={editTitle}
                             placeholder="Title (optional)"
                         />
                         <textarea
@@ -47,7 +61,7 @@ export default function Notes(props) {
                             id="body-input"
                             className="body-input"
                             onInput={handleTextInput}
-                            value={props.text}
+                            value={editText}
                             placeholder="Note"
                         ></textarea>
                         <button id="save-button" className="save-button">
@@ -64,7 +78,7 @@ export default function Notes(props) {
                         </button>
                         <button
                             className="cancel-button"
-                            onClick={() => deleteNote(i)}
+                            onClick={() => areYouSure(i)}
                         >
                             Delete
                         </button>
@@ -74,6 +88,25 @@ export default function Notes(props) {
         ));
     };
 
+    const renderAreYouSure = () => (
+        <Modal show={showAreYouSure}>
+            <Modal.Body>Are you sure you want to delete this note?</Modal.Body>
+            <Modal.Footer>
+                <button
+                    onClick={() => {
+                        setShowAreYouSure(false);
+                        setCurrentId(null);
+                    }}
+                >
+                    No
+                </button>
+                <button className="cancel-button" onClick={deleteNote}>
+                    Yes
+                </button>
+            </Modal.Footer>
+        </Modal>
+    );
+
     useEffect(() => {
         if (props.currentNotebook === null) return;
         props.getNotes();
@@ -81,6 +114,7 @@ export default function Notes(props) {
 
     return (
         <section className="note-display">
+            {renderAreYouSure()}
             <ul id="notes-list">{renderList()}</ul>
         </section>
     );
