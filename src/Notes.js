@@ -1,23 +1,24 @@
 import { useEffect, useState } from "react";
 import { deleteItem, editItem } from "./api/notesAPI";
 import { Modal } from "react-bootstrap";
+import Showdown from "showdown";
 
 export default function Notes(props) {
-    const [editing, setEditing] = useState(null);
     const [editTitle, setEditTitle] = useState("");
     const [editText, setEditText] = useState("");
     const [currentId, setCurrentId] = useState(null);
     const [showAreYouSure, setShowAreYouSure] = useState(false);
+    const converter = new Showdown.Converter();
 
     const handleTitleInput = e => setEditTitle(e.target.value);
     const handleTextInput = e => setEditText(e.target.value);
     const handleSubmit = e => {
         e.preventDefault();
-        editItem(editing, props.currentNotebook, editTitle, editText)
+        editItem(props.editing, props.currentNotebook, editTitle, editText)
             .then(r => {
                 setEditTitle("");
                 setEditText("");
-                setEditing(null);
+                props.setEditing(null);
                 props.getNotes();
             })
             .catch(e => console.log(e));
@@ -26,7 +27,7 @@ export default function Notes(props) {
     const handleEditButton = i => {
         setEditTitle(props.notes[i].title);
         setEditText(props.notes[i].body);
-        setEditing(i);
+        props.setEditing(i);
     };
 
     const areYouSure = id => {
@@ -46,7 +47,7 @@ export default function Notes(props) {
         if (props.notes.length === 0) return <li>No notes found</li>;
         return props.notes.map((note, i) => (
             <li key={i}>
-                {editing !== null ? (
+                {props.editing !== null && props.editing === i ? (
                     <form onSubmit={handleSubmit} id="new-note-form">
                         <input
                             id="title-input"
@@ -72,15 +73,22 @@ export default function Notes(props) {
                     <>
                         {note.title && <h4>{note.title}</h4>}
                         <br />
-                        <p>{note.body}</p>
-                        <button onClick={() => handleEditButton(i)}>
+                        <p
+                            dangerouslySetInnerHTML={{
+                                __html: converter.makeHtml(note.body),
+                            }}
+                        ></p>
+                        <button
+                            style={{ marginBottom: "-9px" }}
+                            onClick={() => handleEditButton(i)}
+                        >
                             Edit
                         </button>
                         <button
-                            className="cancel-button"
+                            className="cancel-button delete-button"
                             onClick={() => areYouSure(i)}
                         >
-                            Delete
+                            X
                         </button>
                     </>
                 )}

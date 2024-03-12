@@ -11,7 +11,8 @@ export default function ComposeBox(props) {
 
     const handleSubmit = e => {
         e.preventDefault();
-        props.saveNote();
+        if (props.text.trim() !== "" || props.title.trim() !== "")
+            props.saveNote();
         props.setTitle("");
         props.setText("");
         setHeight(128);
@@ -28,7 +29,7 @@ export default function ComposeBox(props) {
                     type="text"
                     onInput={handleTitleInput}
                     value={props.title}
-                    placeholder="Title (optional)"
+                    placeholder="New title (optional)"
                 />
                 <textarea
                     rows="4"
@@ -39,11 +40,7 @@ export default function ComposeBox(props) {
                     value={props.text}
                     placeholder="New note"
                 ></textarea>
-                <button
-                    onClick={props.saveNote}
-                    id="save-button"
-                    className="save-button"
-                >
+                <button id="save-button" className="save-button">
                     Save
                 </button>
             </form>

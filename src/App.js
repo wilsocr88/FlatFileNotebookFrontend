@@ -7,6 +7,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import { listFiles, saveItem, getList } from "./api/notesAPI";
 
 export default function App() {
+    const [editing, setEditing] = useState(null);
     const [currentNotebook, setCurrentNotebook] = useState(null);
     const [isError, setIsError] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -45,9 +46,9 @@ export default function App() {
             ) : (
                 !loading &&
                 !isError && (
-                    <Container fluid>
+                    <Container>
                         <Row>
-                            <Col>
+                            <Col md>
                                 <Notebooks
                                     getFiles={getFiles}
                                     notebooks={notebooks}
@@ -58,21 +59,25 @@ export default function App() {
                                 />
                             </Col>
                             {currentNotebook !== null && (
-                                <Col>
+                                <Col md>
                                     <h1 id="notebook-name">
                                         {currentNotebook}
                                     </h1>
-                                    <ComposeBox
-                                        title={title}
-                                        text={text}
-                                        setTitle={setTitle}
-                                        setText={setText}
-                                        saveNote={saveNote}
-                                    />
+                                    {editing === null && (
+                                        <ComposeBox
+                                            title={title}
+                                            text={text}
+                                            setTitle={setTitle}
+                                            setText={setText}
+                                            saveNote={saveNote}
+                                        />
+                                    )}
                                     <Notes
                                         title={title}
                                         text={text}
                                         notes={notes}
+                                        editing={editing}
+                                        setEditing={setEditing}
                                         setTitle={setTitle}
                                         setText={setText}
                                         getNotes={getNotes}

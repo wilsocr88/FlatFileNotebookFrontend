@@ -14,6 +14,7 @@ export default function Notebooks(props) {
 
     // called by modal save button
     const createNewNotebook = () => {
+        if (newName.trim() === "") return;
         createList(newName).then(r => {
             handleClose();
             props.getFiles();
@@ -33,8 +34,14 @@ export default function Notebooks(props) {
         });
     };
 
-    const renderList = () => {
-        return props.notebooks.map((notebook, i) => (
+    const nameStyle = {
+        fontSize: "1.25em",
+        display: "inline-block",
+        margin: 0,
+    };
+
+    const renderList = () =>
+        props.notebooks.map((notebook, i) => (
             <a
                 href="/#"
                 onClick={() => {
@@ -43,19 +50,18 @@ export default function Notebooks(props) {
                 key={i}
             >
                 <li key={notebook}>
-                    <p>{notebook}</p>
+                    <p style={nameStyle}>{notebook + " →"}</p>
                     <button
-                        className="cancel-button"
+                        className="cancel-button delete-button"
                         onClick={() => setShowAreYouSure(true)}
                     >
-                        Delete
+                        X
                     </button>
                 </li>
             </a>
         ));
-    };
 
-    const renderModal = () => (
+    const renderNew = () => (
         <Modal show={showModal} onHide={handleClose}>
             <Modal.Body>
                 <h3>Name of new notebook:</h3>
@@ -97,7 +103,7 @@ export default function Notebooks(props) {
 
     return (
         <>
-            {renderModal()}
+            {renderNew()}
             {renderAreYouSure()}
             <section className="display">
                 <button onClick={handleAddButton} className="add-button">
