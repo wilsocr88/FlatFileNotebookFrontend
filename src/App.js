@@ -5,8 +5,12 @@ import Notes from "./Notes";
 import Notebooks from "./Notebooks";
 import { Container, Row, Col } from "react-bootstrap";
 import { listFiles, saveItem, getList } from "./api/notesAPI";
+import { checkAuth } from "./api/authAPI";
+import Login from "./Login";
+import Signup from "./Signup";
 
-export default function App() {
+export default function App(props) {
+    const [authorized, setAuthorized] = useState("");
     const [editing, setEditing] = useState(null);
     const [currentNotebook, setCurrentNotebook] = useState(null);
     const [isError, setIsError] = useState(false);
@@ -36,17 +40,41 @@ export default function App() {
         saveItem(currentNotebook, title, text).then(getNotes);
     };
 
-    useEffect(getFiles, []);
+    const logout = () => {
+        window.localStorage.removeItem("token");
+        doCheckAuth();
+    };
+
+    const doCheckAuth = () =>
+        checkAuth()
+            .then(r => setAuthorized(r))
+            .catch(e => {
+                setAuthorized(false);
+                setLoading(false);
+            });
+
+    useEffect(() => {
+        doCheckAuth();
+    }, []);
+
+    useEffect(() => {
+        if (authorized) {
+            getFiles();
+        }
+    }, [authorized]);
 
     return (
         <main>
             {loading && <h1>Loading...</h1>}
             {isError ? (
                 <h1>ERROR</h1>
-            ) : (
+            ) : authorized ? (
                 !loading &&
                 !isError && (
                     <Container>
+                        <a style={{ float: "right" }} href="#" onClick={logout}>
+                            Logout
+                        </a>
                         <Row>
                             <Col md>
                                 <Notebooks
@@ -60,9 +88,9 @@ export default function App() {
                             </Col>
                             {currentNotebook !== null && (
                                 <Col md>
-                                    <h1 id="notebook-name">
+                                    <h3 id="notebook-name">
                                         {currentNotebook}
-                                    </h1>
+                                    </h3>
                                     {editing === null && (
                                         <ComposeBox
                                             title={title}
@@ -88,6 +116,20 @@ export default function App() {
                         </Row>
                     </Container>
                 )
+            ) : (
+                <Container>
+                    <Row>
+                        <Col md={{ span: 6, offset: 3 }}>
+                            {props.route === "/signup" ? (
+                                <Signup />
+                            ) : (
+                                props.route === "/" && (
+                                    <Login setAuthorized={setAuthorized} />
+                                )
+                            )}
+                        </Col>
+                    </Row>
+                </Container>
             )}
         </main>
     );

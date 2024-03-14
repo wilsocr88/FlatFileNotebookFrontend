@@ -15,6 +15,7 @@ export default function FetchPromise(params) {
     const promise = new Promise(async function (resolve, reject) {
         const headers = {
             "Content-Type": "application/json",
+            Authorization: "Bearer " + window.localStorage.getItem("token"),
         };
         await fetch(params.url, {
             method: params.method,

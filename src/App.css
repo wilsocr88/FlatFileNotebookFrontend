@@ -72,7 +72,8 @@ textarea {
     outline: none !important;
     overflow-y: hidden;
     resize: none;
-    background-color: var(--inact);
+    background-color: var(--inact) !important;
+    color: var(--text) !important;
 }
 
 input:focus-within,
@@ -99,14 +100,20 @@ p {
 }
 
 button {
-    border: 0;
+    border: 0 !important;
+    border-radius: 0 !important;
     cursor: pointer;
-    padding: 0.5rem 1rem;
-    background: transparent;
+    padding: 0.5rem 1rem !important;
+    background: var(--act) !important;
 }
 
 button:hover {
     background-color: var(--main-color);
+}
+
+label {
+    display: block !important;
+    padding-top: 0.5rem;
 }
 
 /* ids */
@@ -143,11 +150,11 @@ button:hover {
 }
 
 .add-button {
-    background-color: var(--inact);
+    background-color: var(--inact) !important;
 }
 
 .add-button:hover {
-    background-color: var(--main-color);
+    background-color: var(--main-color) !important;
 }
 
 .save-button,
@@ -185,4 +192,9 @@ button:hover {
 
 .notes-list {
     padding: 0 !important;
+}
+
+.block-button {
+    display: block !important;
+    margin: 1rem auto;
 }

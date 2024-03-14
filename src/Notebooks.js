@@ -103,6 +103,7 @@ export default function Notebooks(props) {
 
     return (
         <>
+            <h1>Notebooks</h1>
             {renderNew()}
             {renderAreYouSure()}
             <section className="display">

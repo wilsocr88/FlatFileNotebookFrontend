@@ -41,7 +41,7 @@ export default function ComposeBox(props) {
                     placeholder="New note"
                 ></textarea>
                 <button id="save-button" className="save-button">
-                    Save
+                    Create
                 </button>
             </form>
         </section>

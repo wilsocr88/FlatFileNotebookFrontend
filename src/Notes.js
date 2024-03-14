@@ -121,7 +121,7 @@ export default function Notes(props) {
     useEffect(() => {
         if (props.currentNotebook === null) return;
         props.getNotes();
-    }, [props.currentNotebook]);
+    }, [props]);
 
     return (
         <section className="note-display">
