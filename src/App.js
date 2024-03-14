@@ -8,6 +8,7 @@ import { listFiles, saveItem, getList } from "./api/notesAPI";
 import { checkAuth } from "./api/authAPI";
 import Login from "./Login";
 import Signup from "./Signup";
+import { Link } from "react-router-dom";
 
 export default function App(props) {
     const [authorized, setAuthorized] = useState("");
@@ -72,9 +73,9 @@ export default function App(props) {
                 !loading &&
                 !isError && (
                     <Container>
-                        <a style={{ float: "right" }} href="#" onClick={logout}>
+                        <Link style={{ float: "right" }} onClick={logout}>
                             Logout
-                        </a>
+                        </Link>
                         <Row>
                             <Col md>
                                 <Notebooks
