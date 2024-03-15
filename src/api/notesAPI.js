@@ -46,6 +46,18 @@ export function editItem(id, file, title, body) {
     });
 }
 
+export function reorderItem(file, currentPos, newPos) {
+    return FetchPromise({
+        url: window["config"].apiUrl + "File/ReorderItem",
+        method: "POST",
+        body: {
+            file: file,
+            currentPos: currentPos,
+            newPos: newPos,
+        },
+    });
+}
+
 export function deleteItem(id, file) {
     return FetchPromise({
         url: window["config"].apiUrl + "File/DeleteItem",

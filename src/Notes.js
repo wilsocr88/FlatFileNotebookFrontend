@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { deleteItem, editItem } from "./api/notesAPI";
+import { deleteItem, editItem, reorderItem } from "./api/notesAPI";
 import { Modal } from "react-bootstrap";
 import Showdown from "showdown";
+import { Draggable } from "react-drag-reorder";
 
 export default function Notes(props) {
     const [editTitle, setEditTitle] = useState("");
@@ -18,7 +20,6 @@ export default function Notes(props) {
             .then(r => {
                 setEditTitle("");
                 setEditText("");
-                props.setEditing(null);
                 props.getNotes();
             })
             .catch(e => console.log(e));
@@ -28,6 +29,12 @@ export default function Notes(props) {
         setEditTitle(props.notes[i].title);
         setEditText(props.notes[i].body);
         props.setEditing(i);
+    };
+
+    const reorder = (currentPos, newPos) => {
+        reorderItem(props.currentNotebook, currentPos, newPos).catch(() =>
+            props.setIsError(true)
+        );
     };
 
     const areYouSure = id => {
@@ -43,9 +50,8 @@ export default function Notes(props) {
         });
     };
 
-    const renderList = () => {
-        if (props.notes.length === 0) return <li>No notes found</li>;
-        return props.notes.map((note, i) => (
+    const mapList = () =>
+        props.notes.map((note, i) => (
             <li key={i}>
                 {props.editing !== null && props.editing === i ? (
                     <form onSubmit={handleSubmit} id="new-note-form">
@@ -70,7 +76,7 @@ export default function Notes(props) {
                         </button>
                     </form>
                 ) : (
-                    <>
+                    <span key={i}>
                         {note.title && <h4>{note.title}</h4>}
                         <br />
                         <p
@@ -90,10 +96,17 @@ export default function Notes(props) {
                         >
                             X
                         </button>
-                    </>
+                    </span>
                 )}
             </li>
         ));
+    const renderList = () => {
+        if (props.notes.length === 0) return <li>No notes found</li>;
+        return props.editing === null ? (
+            <Draggable onPosChange={reorder}>{mapList()}</Draggable>
+        ) : (
+            mapList()
+        );
     };
 
     const renderAreYouSure = () => (
@@ -120,8 +133,10 @@ export default function Notes(props) {
 
     useEffect(() => {
         if (props.currentNotebook === null) return;
-        props.getNotes();
-    }, [props]);
+        props.setEditing(null);
+    }, [props.currentNotebook, props.notes]);
+
+    useEffect(props.getNotes, []);
 
     return (
         <section className="note-display">

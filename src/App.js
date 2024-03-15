@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "./App.css";
 import ComposeBox from "./ComposeBox";
 import Notes from "./Notes";
@@ -33,12 +33,16 @@ export default function App(props) {
             });
     };
 
-    const getNotes = () => {
-        getList(currentNotebook).then(res => setNotes(res.items));
-    };
+    const getNotes = useCallback(() => {
+        getList(currentNotebook).then(res => {
+            setNotes(res.items);
+            // Re-render list of notes after new note
+            setEditing(!!editing);
+        });
+    }, [currentNotebook]);
 
     const saveNote = () => {
-        saveItem(currentNotebook, title, text).then(getNotes);
+        saveItem(currentNotebook, title, text).then(() => getNotes());
     };
 
     const logout = () => {
@@ -106,11 +110,12 @@ export default function App(props) {
                                         text={text}
                                         notes={notes}
                                         editing={editing}
+                                        currentNotebook={currentNotebook}
                                         setEditing={setEditing}
                                         setTitle={setTitle}
                                         setText={setText}
                                         getNotes={getNotes}
-                                        currentNotebook={currentNotebook}
+                                        setIsError={setIsError}
                                     />
                                 </Col>
                             )}
