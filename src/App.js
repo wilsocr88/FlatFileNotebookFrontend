@@ -39,7 +39,7 @@ export default function App(props) {
             // Re-render list of notes after new note
             setEditing(!!editing);
         });
-    }, [currentNotebook]);
+    }, [currentNotebook, editing]);
 
     const saveNote = () => {
         saveItem(currentNotebook, title, text).then(() => getNotes());
