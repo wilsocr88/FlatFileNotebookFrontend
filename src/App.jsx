@@ -11,7 +11,7 @@ import Signup from "./Signup";
 import { Link } from "react-router-dom";
 
 export default function App(props) {
-    const [authorized, setAuthorized] = useState("");
+    const [authorized, setAuthorized] = useState(false);
     const [editing, setEditing] = useState(null);
     const [currentNotebook, setCurrentNotebook] = useState(null);
     const [isError, setIsError] = useState(false);
