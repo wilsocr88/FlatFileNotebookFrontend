@@ -52,7 +52,7 @@ export default function Notes(props) {
 
     const mapList = () =>
         props.notes.map((note, i) => (
-            <li key={i}>
+            <div className="list-item" key={i}>
                 {props.editing !== null && props.editing === i ? (
                     <form onSubmit={handleSubmit} id="new-note-form">
                         <input
@@ -98,7 +98,7 @@ export default function Notes(props) {
                         </button>
                     </span>
                 )}
-            </li>
+            </div>
         ));
     const renderList = () => {
         if (props.notes.length === 0) return <li>No notes found</li>;
@@ -141,7 +141,7 @@ export default function Notes(props) {
     return (
         <section className="note-display">
             {renderAreYouSure()}
-            <ul id="notes-list">{renderList()}</ul>
+            <div id="notes-list">{renderList()}</div>
         </section>
     );
 }

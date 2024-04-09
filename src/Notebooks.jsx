@@ -49,7 +49,7 @@ export default function Notebooks(props) {
                 }}
                 key={i}
             >
-                <li key={notebook}>
+                <div className="list-item" key={notebook}>
                     <p style={nameStyle}>{notebook + " →"}</p>
                     <button
                         className="cancel-button delete-button"
@@ -57,7 +57,7 @@ export default function Notebooks(props) {
                     >
                         X
                     </button>
-                </li>
+                </div>
             </a>
         ));
 
@@ -110,7 +110,7 @@ export default function Notebooks(props) {
                 <button onClick={handleAddButton} className="add-button">
                     + New Notebook
                 </button>
-                <ul id="notebooks-list">{renderList()}</ul>
+                <div id="notebooks-list">{renderList()}</div>
             </section>
         </>
     );
