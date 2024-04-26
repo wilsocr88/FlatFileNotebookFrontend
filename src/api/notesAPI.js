@@ -26,9 +26,9 @@ export function saveItem(file, title, body) {
         url: window["config"].apiUrl + "File/SaveItem",
         method: "POST",
         body: {
-            file: file,
-            title: title,
-            body: body,
+            File: file,
+            Title: title,
+            Body: body,
         },
     });
 }
@@ -38,10 +38,10 @@ export function editItem(id, file, title, body) {
         url: window["config"].apiUrl + "File/EditItem",
         method: "POST",
         body: {
-            id: id,
-            file: file,
-            title: title,
-            body: body,
+            Id: id,
+            File: file,
+            Title: title,
+            Body: body,
         },
     });
 }
@@ -51,9 +51,9 @@ export function reorderItem(file, currentPos, newPos) {
         url: window["config"].apiUrl + "File/ReorderItem",
         method: "POST",
         body: {
-            file: file,
-            currentPos: currentPos,
-            newPos: newPos,
+            File: file,
+            CurrentPos: currentPos,
+            NewPos: newPos,
         },
     });
 }
@@ -63,8 +63,8 @@ export function deleteItem(id, file) {
         url: window["config"].apiUrl + "File/DeleteItem",
         method: "DELETE",
         body: {
-            id: id,
-            file: file,
+            Id: id,
+            File: file,
         },
     });
 }

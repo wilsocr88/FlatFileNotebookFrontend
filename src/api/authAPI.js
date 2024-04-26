@@ -5,8 +5,8 @@ export function login(user, pass) {
         url: window["config"].apiUrl + "Auth/Login",
         method: "POST",
         body: {
-            user: user,
-            pass: pass,
+            User: user,
+            Pass: pass,
         },
     });
 }
@@ -23,8 +23,8 @@ export function createUser(user, pass) {
         url: window["config"].apiUrl + "Auth/CreateUser",
         method: "POST",
         body: {
-            user: user,
-            pass: pass,
+            User: user,
+            Pass: pass,
         },
     });
 }

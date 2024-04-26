@@ -2,6 +2,7 @@
   "name": "notes",
   "version": "0.3.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "bootstrap": "^5.3.3",
     "react": "^18.2.0",

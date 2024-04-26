@@ -3,7 +3,7 @@ import "./App.css";
 import ComposeBox from "./ComposeBox";
 import Notes from "./Notes";
 import Notebooks from "./Notebooks";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Spinner } from "react-bootstrap";
 import { listFiles, saveItem, getList } from "./api/notesAPI";
 import { checkAuth } from "./api/authAPI";
 import Login from "./Login";
@@ -11,11 +11,11 @@ import Signup from "./Signup";
 import { Link } from "react-router-dom";
 
 export default function App(props) {
+    const [loading, setLoading] = useState(true);
     const [authorized, setAuthorized] = useState(false);
     const [editing, setEditing] = useState(null);
     const [currentNotebook, setCurrentNotebook] = useState(null);
     const [isError, setIsError] = useState(false);
-    const [loading, setLoading] = useState(true);
     const [notebooks, setNotebooks] = useState([]);
     const [title, setTitle] = useState("");
     const [text, setText] = useState("");
@@ -59,6 +59,7 @@ export default function App(props) {
             });
 
     useEffect(() => {
+        setLoading(true);
         doCheckAuth();
     }, []);
 
@@ -70,12 +71,10 @@ export default function App(props) {
 
     return (
         <main>
-            {loading && <h1>Loading...</h1>}
+            {loading && <Container><Row><Col className="m-5 p-5"><center><Spinner /></center></Col></Row></Container>}
             {isError ? (
                 <h1>ERROR</h1>
-            ) : authorized ? (
-                !loading &&
-                !isError && (
+            ) : authorized ? ( 
                     <Container>
                         <Link style={{ float: "right" }} onClick={logout}>
                             Logout
@@ -121,11 +120,10 @@ export default function App(props) {
                             )}
                         </Row>
                     </Container>
-                )
-            ) : (
+            ) : !loading && (
                 <Container>
                     <Row>
-                        <Col md={{ span: 6, offset: 3 }}>
+                        <Col className="my-5 py-5" md={{ span: 6, offset: 3 }}>
                             {props.route === "/signup" ? (
                                 <Signup />
                             ) : (

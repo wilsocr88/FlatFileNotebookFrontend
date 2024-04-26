@@ -37,8 +37,8 @@ export default function Signup(props) {
                 onChange={handleEmailChange}
             />
             <br />
-            <label htmlFor="password">Password</label>
 
+            <label htmlFor="password">Create a password</label>
             <FormControl
                 type="password"
                 name="password"
@@ -46,10 +46,12 @@ export default function Signup(props) {
                 value={password}
                 onChange={handlePasswordChange}
             />
+
             <p style={{ color: "red" }}>{error}</p>
             <Button className="add-button block-button" onClick={handleClick}>
                 Signup
             </Button>
+            
             <p>
                 <a href="/">Login</a>
             </p>
