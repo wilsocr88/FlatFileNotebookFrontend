@@ -69,71 +69,86 @@ export default function App(props) {
         }
     }, [authorized]);
 
+    useEffect(() => getNotes(), [currentNotebook]);
+
     return (
         <main>
-            {loading && <Container><Row><Col className="m-5 p-5"><center><Spinner /></center></Col></Row></Container>}
-            {isError ? (
-                <h1>ERROR</h1>
-            ) : authorized ? ( 
-                    <Container>
-                        <Link style={{ float: "right" }} onClick={logout}>
-                            Logout
-                        </Link>
-                        <Row>
-                            <Col md>
-                                <Notebooks
-                                    getFiles={getFiles}
-                                    notebooks={notebooks}
-                                    setLoading={setLoading}
-                                    setIsError={setIsError}
-                                    currentNotebook={currentNotebook}
-                                    setCurrentNotebook={setCurrentNotebook}
-                                />
-                            </Col>
-                            {currentNotebook !== null && (
-                                <Col md>
-                                    <h3 id="notebook-name">
-                                        {currentNotebook}
-                                    </h3>
-                                    {editing === null && (
-                                        <ComposeBox
-                                            title={title}
-                                            text={text}
-                                            setTitle={setTitle}
-                                            setText={setText}
-                                            saveNote={saveNote}
-                                        />
-                                    )}
-                                    <Notes
-                                        title={title}
-                                        text={text}
-                                        notes={notes}
-                                        editing={editing}
-                                        currentNotebook={currentNotebook}
-                                        setEditing={setEditing}
-                                        setTitle={setTitle}
-                                        setText={setText}
-                                        getNotes={getNotes}
-                                        setIsError={setIsError}
-                                    />
-                                </Col>
-                            )}
-                        </Row>
-                    </Container>
-            ) : !loading && (
+            {loading && (
                 <Container>
                     <Row>
-                        <Col className="my-5 py-5" md={{ span: 6, offset: 3 }}>
-                            {props.route === "/signup" ? (
-                                <Signup />
-                            ) : (
-                                props.route === "/" && (
-                                    <Login setAuthorized={setAuthorized} />
-                                )
-                            )}
+                        <Col className="m-5 p-5">
+                            <center>
+                                <Spinner />
+                            </center>
                         </Col>
                     </Row>
                 </Container>
+            )}
+            {isError ? (
+                <h1>ERROR</h1>
+            ) : authorized ? (
+                <Container>
+                    <Link style={{ float: "right" }} onClick={logout}>
+                        Logout
+                    </Link>
+                    <Row>
+                        <Col md>
+                            <Notebooks
+                                getFiles={getFiles}
+                                notebooks={notebooks}
+                                setLoading={setLoading}
+                                setIsError={setIsError}
+                                currentNotebook={currentNotebook}
+                                setCurrentNotebook={setCurrentNotebook}
+                            />
+                        </Col>
+                        {currentNotebook !== null && (
+                            <Col md>
+                                <h3 id="notebook-name">{currentNotebook}</h3>
+                                {editing === null && (
+                                    <ComposeBox
+                                        title={title}
+                                        text={text}
+                                        setTitle={setTitle}
+                                        setText={setText}
+                                        saveNote={saveNote}
+                                    />
+                                )}
+                                <Notes
+                                    title={title}
+                                    text={text}
+                                    notes={notes}
+                                    editing={editing}
+                                    currentNotebook={currentNotebook}
+                                    setEditing={setEditing}
+                                    setTitle={setTitle}
+                                    setText={setText}
+                                    getNotes={getNotes}
+                                    setIsError={setIsError}
+                                />
+                            </Col>
+                        )}
+                    </Row>
+                </Container>
+            ) : (
+                !loading && (
+                    <Container>
+                        <Row>
+                            <Col
+                                className="my-5 py-5"
+                                md={{ span: 6, offset: 3 }}
+                            >
+                                {props.route === "/signup" ? (
+                                    <Signup />
+                                ) : (
+                                    props.route === "/" && (
+                                        <Login setAuthorized={setAuthorized} />
+                                    )
+                                )}
+                            </Col>
+                        </Row>
+                    </Container>
+                )
             )}
         </main>
     );

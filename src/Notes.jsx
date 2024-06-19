@@ -101,7 +101,7 @@ export default function Notes(props) {
             </div>
         ));
     const renderList = () => {
-        if (props.notes.length === 0) return <li>No notes found</li>;
+        if (props.notes.length === 0) return <p>No notes found</p>;
         return props.editing === null ? (
             <Draggable onPosChange={reorder}>{mapList()}</Draggable>
         ) : (
