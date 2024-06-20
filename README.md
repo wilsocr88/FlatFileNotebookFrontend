@@ -6,7 +6,7 @@ Front end app for [Flat File Backend](https://github.com/wilsocr88/FlatFileNoteb
 
 The file `/public/config.js` contains the URL to point this app to the back end.
 
-Upon first run, click "login" once to create the Users table on the backend.
+Upon first run, click "login" once to create the Users table.
 
 ## Features
 
